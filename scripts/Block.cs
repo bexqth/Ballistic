@@ -15,7 +15,7 @@ public partial class Block : StaticBody2D
 	{
 		colorRect = GetNode<ColorRect>("ColorRect");
 		labelNumber = colorRect.GetNode<Label>("Label");
-		number = 1;
+		number = 5;
 		updateLabelNumber();
 		signalConnected = false;
 		//this.Connect(nameof(Ball.BallCollided), new Callable(this, nameof(onBallCollided)));

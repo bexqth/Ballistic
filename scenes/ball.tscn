@@ -28,5 +28,3 @@ shape = SubResource("CircleShape2D_ojxhw")
 
 [node name="Ball_Timer" type="Timer" parent="."]
 wait_time = 0.8
-
-[connection signal="timeout" from="Ball_Timer" to="." method="_on_ball_timer_timeout"]

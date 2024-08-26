@@ -19,7 +19,7 @@ script = ExtResource("1_15f42")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = SubResource("GradientTexture2D_ruryk")
 
-[node name="Label" type="Label" parent="."]
+[node name="Number_Label" type="Label" parent="."]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -33,3 +33,6 @@ text = "2"
 horizontal_alignment = 1
 
 [node name="Ball_Timer" type="Timer" parent="."]
+wait_time = 0.2
+
+[connection signal="timeout" from="Ball_Timer" to="." method="_on_ball_timer_timeout"]
