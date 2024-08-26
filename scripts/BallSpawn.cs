@@ -11,12 +11,14 @@ public partial class BallSpawn : Node2D
 	private Label numberLabel;
 	private bool grabbed;
 	private Vector2 jumpDirection;
+	public bool roundDone{get;set;}
 	public override void _Ready()
 	{
 		this.ballsToShoot = numberOfBalls;
 		this.ballTimer = GetNode<Timer>("Ball_Timer");
 		this.numberLabel = GetNode<Label>("Number_Label");
 		numberLabel.Text = ballsToShoot.ToString();
+		roundDone = false;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -49,6 +51,7 @@ public partial class BallSpawn : Node2D
 		grabbed = false;
 		ballTimer.Stop();
 		numberLabel.Text = ballsToShoot.ToString();
+		roundDone = true;
 	}
 
 	public void SpawnBall() {

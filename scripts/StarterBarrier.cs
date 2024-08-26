@@ -36,11 +36,12 @@ public partial class StarterBarrier : Area2D
 			if(ballsCollided == ballSpawn.numberOfBalls) {
 				ballsCollided = 0;
 				ballSpawn.Restore();
+				
 			}
 			ballSpawn.Visible = true;
 			//ball.QueueFree();
 
-			GD.Print("Collision detected with: ", body.Name);
+			//GD.Print("Collision detected with: ", body.Name);
 			//ball.restore(ball.Position.X);
 		}
 	}

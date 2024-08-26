@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class Block : StaticBody2D
 {
@@ -7,7 +8,11 @@ public partial class Block : StaticBody2D
 	private ColorRect colorRect;
 	private Label labelNumber;
 	private int number;
+	private int space = 10;
+	private int blockHeight = 70;
+	private int step;
 	private bool signalConnected;
+	public List<Block> blocks{get;set;}
 
 	[Export]
 	public Ball ball;
@@ -18,14 +23,32 @@ public partial class Block : StaticBody2D
 		number = 5;
 		updateLabelNumber();
 		signalConnected = false;
+		this.step = this.space + this.blockHeight;
 		//this.Connect(nameof(Ball.BallCollided), new Callable(this, nameof(onBallCollided)));
 	}
 
+    public override void _Process(double delta)
+    {
+        checkForScore();
+    }
 
-	public override void _PhysicsProcess(double delta)
+    public override void _PhysicsProcess(double delta)
 	{
 
 
+	}
+
+	public void MoveDown() {
+		var pos = Position;
+		pos.Y = this.Position.Y + this.step;
+		Position = pos;
+	}
+
+	public void checkForScore() {
+		if(number <= 0) {
+			blocks.Remove(this);
+			this.QueueFree();
+		}
 	}
 
 
