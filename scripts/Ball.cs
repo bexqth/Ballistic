@@ -3,68 +3,79 @@ using System;
 
 public partial class Ball : CharacterBody2D
 {
-    private bool grabbed;
-    private bool isFlying;
-    private Vector2 jumpDirection;
-    private Vector2 velocity = new Vector2();
-    private float jumpForce = 1500f;
-    private float gravity = 20f;
+	private bool grabbed;
+	private bool isFlying;
+	private Vector2 jumpDirection;
+	private Vector2 velocity = new Vector2();
+	private float jumpForce = 1000f;
+	private float gravity = 30f;
+	public int numberOfBalls;
+	private int ballsToShoot;
+	private Timer ballTimer;
 
-    public override void _Ready()
-    {
-        grabbed = false;
-        isFlying = false;
-        velocity = Vector2.Zero;  // Ensure the ball stays in place initially
-    }
+	[Signal]
+	public delegate void BallCollidedEventHandler(Ball ball);
 
-    public override void _PhysicsProcess(double delta)
-    {
-        if (Input.IsActionJustPressed("left_click"))
-        {
-            grabbed = true;
-            isFlying = false;
-            velocity = Vector2.Zero;  // Stop any movement while grabbed
-        }
+	public override void _Ready() {
+		grabbed = false;
+		isFlying = false;
+		numberOfBalls = 1;
+		ballTimer = GetNode<Timer>("Ball_Timer");
+		this.ballsToShoot = numberOfBalls;
+	}
 
-        if (grabbed)
-        {
-            SetAngle();
-        }
 
-        if (grabbed && Input.IsActionJustReleased("left_click"))
-        {
-            SetFlying();
-            grabbed = false;
-            isFlying = true;
-        }
+	public override void _PhysicsProcess(double delta) {
+		if (Input.IsActionJustPressed("left_click")) {
+			grabbed = true;
+			isFlying = false;
+		}
 
-        // Apply gravity only if the ball is flying
-        if (isFlying)
-        {
-            velocity.Y += gravity * (float)delta;
-        }
+		if (grabbed) {
+			SetAngle();
+		}
 
-        // Move and collide
-        KinematicCollision2D collision = MoveAndCollide(velocity * (float)delta);
-        if (collision != null)
-        {
-            // Handle collision response
-            velocity = velocity.Bounce(collision.GetNormal());
-        }
-    }
+		if (grabbed && Input.IsActionJustReleased("left_click")) {
+			SetFlying();
+			grabbed = false;
+			isFlying = true;
+		}
 
-    private void SetAngle()
-    {
-        Vector2 mousePosition = GetGlobalMousePosition();
-        if (grabbed)
-        {
-            LookAt(mousePosition);
-            jumpDirection = (mousePosition - GlobalPosition).Normalized();
-        }
-    }
+		if (isFlying) {
+			velocity.Y += gravity * (float)delta;
+		}
 
-    private void SetFlying()
-    {
-        velocity = jumpDirection * jumpForce;
-    }
+		// Move and collide
+		KinematicCollision2D collision = MoveAndCollide(velocity * (float)delta);
+		if (collision != null) {
+			velocity = velocity.Bounce(collision.GetNormal());
+			//EmitSignal(nameof(Ball.BallCollided), this);
+		}
+	}
+	public void restore(float positionX) {
+		grabbed = false;
+		isFlying = false;
+		velocity = Vector2.Zero;
+		Position = new Vector2(positionX, 755);
+	}
+
+	private void SetAngle() {
+		Vector2 mousePosition = GetGlobalMousePosition();
+		if (grabbed) {
+			LookAt(mousePosition);
+			jumpDirection = (mousePosition - GlobalPosition).Normalized();
+		}
+	}
+
+	private void SetFlying() {
+		velocity = jumpDirection * jumpForce;
+	}
+	
+	
+	private void _on_ball_timer_timeout()
+	{
+		// Replace with function body.
+	}
 }
+
+

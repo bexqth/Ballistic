@@ -1,6 +1,16 @@
-[gd_scene format=3 uid="uid://dnmycfkxovggk"]
+[gd_scene load_steps=4 format=3 uid="uid://dnmycfkxovggk"]
 
-[node name="Block" type="Node2D"]
+[ext_resource type="Script" path="res://scripts/Block.cs" id="1_ovc1e"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qo12j"]
+size = Vector2(70, 70)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xt2cp"]
+size = Vector2(72, 72)
+
+[node name="Block" type="StaticBody2D"]
+collision_layer = 2
+script = ExtResource("1_ovc1e")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_right = 70.0
@@ -25,4 +35,16 @@ offset_bottom = -15.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 30
-text = "1"
+text = "5"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(35, 35)
+shape = SubResource("RectangleShape2D_qo12j")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(35, 35)
+shape = SubResource("RectangleShape2D_xt2cp")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
