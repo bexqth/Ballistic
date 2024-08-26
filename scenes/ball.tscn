@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" path="res://scripts/Ball.cs" id="1_36ss6"]
 
-[sub_resource type="Gradient" id="Gradient_ey0tv"]
+[sub_resource type="Gradient" id="Gradient_tlmke"]
 offsets = PackedFloat32Array(0, 0.546135, 0.553616, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 0.984314, 0.984314, 0.984314, 0, 0.792157, 0.792157, 0.792157, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_15n2a"]
-gradient = SubResource("Gradient_ey0tv")
+gradient = SubResource("Gradient_tlmke")
 width = 45
 height = 45
 fill = 1

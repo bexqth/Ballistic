@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://scripts/Global.cs" id="1_8khsq"]
 [ext_resource type="Script" path="res://scripts/StarterBarrier.cs" id="1_cgljc"]
-[ext_resource type="PackedScene" uid="uid://do2dmqj6jyynp" path="res://scenes/ball.tscn" id="1_dev2v"]
 [ext_resource type="PackedScene" uid="uid://dnmycfkxovggk" path="res://scenes/block.tscn" id="2_tbwvj"]
+[ext_resource type="PackedScene" uid="uid://88biodfp84e8" path="res://scenes/ball_spawn.tscn" id="4_c5jvu"]
 
 [sub_resource type="Gradient" id="Gradient_au3x6"]
 colors = PackedColorArray(0.172549, 0.00392157, 0.12549, 1, 0, 0.00392157, 0.0784314, 1)
@@ -24,7 +24,7 @@ size = Vector2(20, 705)
 size = Vector2(630, 23)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mymlk"]
-size = Vector2(623, 45)
+size = Vector2(623, 25)
 
 [node name="Background" type="Control"]
 layout_mode = 3
@@ -93,18 +93,20 @@ physics_material_override = SubResource("PhysicsMaterial_qckwl")
 position = Vector2(314, 83)
 shape = SubResource("RectangleShape2D_14jqo")
 
-[node name="Area2D_Line" type="Area2D" parent="."]
+[node name="Area2D_Line" type="Area2D" parent="." node_paths=PackedStringArray("ballSpawn")]
 position = Vector2(3, 754)
 script = ExtResource("1_cgljc")
+ballSpawn = NodePath("../Ball_spawn")
 
 [node name="CollisionShape2D_Line" type="CollisionShape2D" parent="Area2D_Line"]
-position = Vector2(311.5, 23.5)
+position = Vector2(311.5, 33.5)
 shape = SubResource("RectangleShape2D_mymlk")
-
-[node name="ball" parent="." instance=ExtResource("1_dev2v")]
-position = Vector2(328, 755)
 
 [node name="Block" parent="." instance=ExtResource("2_tbwvj")]
 position = Vector2(122, 217)
+
+[node name="Ball_spawn" parent="." instance=ExtResource("4_c5jvu")]
+position = Vector2(314, 754)
+numberOfBalls = 1
 
 [connection signal="body_entered" from="Area2D_Line" to="Area2D_Line" method="_on_body_entered"]
