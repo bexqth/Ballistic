@@ -19,6 +19,7 @@ public partial class StarterBarrier : Area2D
 	
 	public override void _Process(double delta)
 	{
+
 	}
 	
 	
@@ -43,6 +44,8 @@ public partial class StarterBarrier : Area2D
 
 			//GD.Print("Collision detected with: ", body.Name);
 			//ball.restore(ball.Position.X);
+		} else if (body is Block block) {
+			
 		}
 	}
 }

@@ -6,7 +6,7 @@ public partial class Block : StaticBody2D
 {
 	// Called when the node enters the scene tree for the first time.
 	private ColorRect colorRect;
-	private Label labelNumber;
+	public Label labelNumber{get;set;}
 	public int number{get;set;}
 	private int space = 10;
 	private int blockHeight = 70;
@@ -17,6 +17,7 @@ public partial class Block : StaticBody2D
 	private Color originalColor;
 	public int scoreAdd{get;set;}
 	public Label scoreLabel{get;set;}
+	private PackedScene particlesScene;
 
 	[Export]
 	public Ball ball;
@@ -24,13 +25,14 @@ public partial class Block : StaticBody2D
 	{
 		colorRect = GetNode<ColorRect>("ColorRect");
 		line = colorRect.GetNode<Line2D>("Line2D");
-		labelNumber = colorRect.GetNode<Label>("Label");
+		labelNumber = GetNode<Label>("Label");
 		originalColor = colorRect.Color;
-		number = 6;
+		number = 2;
 		updateLabelNumber();
 		signalConnected = false;
 		this.step = this.space + this.blockHeight;
 		//this.Connect(nameof(Ball.BallCollided), new Callable(this, nameof(onBallCollided)));
+		particlesScene = GD.Load<PackedScene>("res://scenes/particles_2d.tscn");
 	}
 
 
@@ -45,6 +47,11 @@ public partial class Block : StaticBody2D
 	public override void _PhysicsProcess(double delta)
 	{
 			
+	}
+
+	public void setNumber(int num) {
+		this.number = num;
+		this.labelNumber.Text = this.number.ToString();
 	}
 
 	public void LightUp() {
@@ -63,6 +70,10 @@ public partial class Block : StaticBody2D
 
 	public void checkForScore() {
 		if(number <= 0) {
+			GpuParticles2D particles = (GpuParticles2D)particlesScene.Instantiate();
+			particles.Position = this.Position;
+			particles.Emitting = true;
+			GetTree().Root.AddChild(particles);
 			blocks.Remove(this);
 			this.QueueFree();
 		}
@@ -88,7 +99,7 @@ public partial class Block : StaticBody2D
 		this.reduceNumber();
 		this.updateLabelNumber();
 		//global.totalScore++;
-		GD.Print(scoreLabel);
+		//GD.Print(scoreLabel);
 		int score = this.scoreLabel.Text.ToInt();
 		GD.Print(score);
 		score++;

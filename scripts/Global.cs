@@ -21,6 +21,7 @@ public partial class Global : Control
 	public int totalScore{get;set;}
 	[Export]
 	public BallSpawn ballSpawn;
+	private int level;
 	//public static Global Instance { get; private set; }
 	public override void _Ready()
 	{
@@ -35,6 +36,7 @@ public partial class Global : Control
 		//firstBlock.scoreAdd = totalScore;
 		this.step = this.space + this.blockHeight;
 		this.totalScore = 0;
+		this.level = 1;
 		this.scoreLabel.Text = this.totalScore.ToString();
 		//Instance = this;
 		//GD.Print(nodePosition);
@@ -60,7 +62,8 @@ public partial class Global : Control
 		
 		//int numberOfNewBlocks = 7;
 		//int[] positions = new int[7] {1,2,3,4,5,6,7}; //MAX IS 7
-
+		this.level++;
+		GD.Print(level);
 		var rnd = new Random();
 		int numberOfNewBlocks = rnd.Next(1,5);
 		var positions = Enumerable.Range(1,7).OrderBy(x => rnd.Next()).Take(numberOfNewBlocks).ToList();
@@ -71,10 +74,12 @@ public partial class Global : Control
 			//GD.Print(newBlockPosition);
 			newBlock.Position = newBlockPosition;
 			newBlock.blocks = blocks;
-			newBlock.scoreLabel = scoreLabel;
-			//newBlock.scoreAdd = totalScore;
+			newBlock.scoreLabel = this.scoreLabel;
+
 			blocks.Add(newBlock);
 			GetTree().Root.AddChild(newBlock);
+
+			newBlock.setNumber(level);
 		}
 	}
 

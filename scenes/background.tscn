@@ -109,7 +109,7 @@ position = Vector2(250, 185)
 
 [node name="Ball_spawn" parent="." instance=ExtResource("4_c5jvu")]
 position = Vector2(287, 753)
-numberOfBalls = 4
+numberOfBalls = 1
 
 [node name="Node2D" type="Node2D" parent="."]
 position = Vector2(10, 185)
