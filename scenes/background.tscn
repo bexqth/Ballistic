@@ -10,7 +10,7 @@ colors = PackedColorArray(0.172549, 0.00392157, 0.12549, 1, 0, 0.00392157, 0.078
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_bu4b0"]
 gradient = SubResource("Gradient_au3x6")
-width = 630
+width = 570
 height = 800
 fill_from = Vector2(0.475016, 0.153846)
 fill_to = Vector2(0.457265, 1)
@@ -21,10 +21,10 @@ size = Vector2(20, 705)
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_qckwl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_14jqo"]
-size = Vector2(630, 23)
+size = Vector2(572, 23)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mymlk"]
-size = Vector2(623, 25)
+size = Vector2(567, 25)
 
 [node name="Background" type="Control" node_paths=PackedStringArray("firstBlock", "node", "ballSpawn")]
 layout_mode = 3
@@ -51,25 +51,24 @@ expand_mode = 1
 stretch_mode = 2
 
 [node name="Line2D" type="Line2D" parent="."]
-points = PackedVector2Array(630, 755, 0, 755)
+points = PackedVector2Array(570, 755, 0, 755)
 width = 2.0
 default_color = Color(0.713726, 0.713726, 0.713726, 0.74902)
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = -1
 anchor_right = 1.0
-offset_bottom = 95.0
+offset_bottom = 86.0
 grow_horizontal = 2
 color = Color(0.0901961, 0.0901961, 0.0901961, 0.6)
 
 [node name="Label" type="Label" parent="ColorRect"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 1.0
+offset_bottom = 88.0
 grow_horizontal = 2
-grow_vertical = 2
 theme_override_font_sizes/font_size = 64
 text = "802"
 horizontal_alignment = 1
@@ -78,7 +77,7 @@ horizontal_alignment = 1
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(636, 448)
+position = Vector2(577, 451)
 shape = SubResource("RectangleShape2D_hcd33")
 
 [node name="StaticBody2D2" type="StaticBody2D" parent="."]
@@ -93,7 +92,7 @@ collision_layer = 2
 physics_material_override = SubResource("PhysicsMaterial_qckwl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3"]
-position = Vector2(314, 83)
+position = Vector2(285, 83)
 shape = SubResource("RectangleShape2D_14jqo")
 
 [node name="Area2D_Line" type="Area2D" parent="." node_paths=PackedStringArray("ballSpawn")]
@@ -102,14 +101,14 @@ script = ExtResource("1_cgljc")
 ballSpawn = NodePath("../Ball_spawn")
 
 [node name="CollisionShape2D_Line" type="CollisionShape2D" parent="Area2D_Line"]
-position = Vector2(311.5, 33.5)
+position = Vector2(283.5, 33.5)
 shape = SubResource("RectangleShape2D_mymlk")
 
 [node name="Block" parent="." instance=ExtResource("2_tbwvj")]
-position = Vector2(281, 185)
+position = Vector2(250, 185)
 
 [node name="Ball_spawn" parent="." instance=ExtResource("4_c5jvu")]
-position = Vector2(314, 754)
+position = Vector2(287, 753)
 numberOfBalls = 4
 
 [node name="Node2D" type="Node2D" parent="."]

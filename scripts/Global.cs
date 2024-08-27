@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class Global : Control
 {
@@ -15,17 +16,27 @@ public partial class Global : Control
 	private int blockHeight = 70;
 	private int step;
 	private List<Block> blocks;
-
+	private Label scoreLabel;
+	private ColorRect scoreColorRect;
+	public int totalScore{get;set;}
 	[Export]
 	public BallSpawn ballSpawn;
+	//public static Global Instance { get; private set; }
 	public override void _Ready()
 	{
+		this.scoreColorRect = GetNode<ColorRect>("ColorRect");
+		this.scoreLabel = this.scoreColorRect.GetNode<Label>("Label");
 		this.firstBlockPosition = firstBlock.Position;
 		this.nodePosition = node.Position;
 		this.blocks = new List<Block>();
 		this.blocks.Add(firstBlock);
 		firstBlock.blocks = blocks;
+		firstBlock.scoreLabel = this.scoreLabel;
+		//firstBlock.scoreAdd = totalScore;
 		this.step = this.space + this.blockHeight;
+		this.totalScore = 0;
+		this.scoreLabel.Text = this.totalScore.ToString();
+		//Instance = this;
 		//GD.Print(nodePosition);
 	}
 
@@ -41,27 +52,37 @@ public partial class Global : Control
 	}
 
 
+	public void UpdateScore() {
+
+	}
+
 	public void SpawnBlocks() {
-		//Random random = new Random();
-		//int numberOfNewBlocks = random.Next(1,4);
-		int numberOfNewBlocks = 3;
-		int[] positions = new int[3] {1,3,4}; //MAX IS 7
+		
+		//int numberOfNewBlocks = 7;
+		//int[] positions = new int[7] {1,2,3,4,5,6,7}; //MAX IS 7
+
+		var rnd = new Random();
+		int numberOfNewBlocks = rnd.Next(1,5);
+		var positions = Enumerable.Range(1,7).OrderBy(x => rnd.Next()).Take(numberOfNewBlocks).ToList();
 		for(int i = 0; i < numberOfNewBlocks; i++) {
 			PackedScene newBlockScene = GD.Load<PackedScene>("res://scenes/block.tscn");
 			Block newBlock = (Block)newBlockScene.Instantiate();
-			Vector2 newBlockPosition = new Vector2(nodePosition.X  + positions[i]*this.step, nodePosition.Y);
+			Vector2 newBlockPosition = new Vector2(nodePosition.X  + positions[i]*this.step - this.step, nodePosition.Y);
+			//GD.Print(newBlockPosition);
 			newBlock.Position = newBlockPosition;
 			newBlock.blocks = blocks;
+			newBlock.scoreLabel = scoreLabel;
+			//newBlock.scoreAdd = totalScore;
 			blocks.Add(newBlock);
-
 			GetTree().Root.AddChild(newBlock);
 		}
 	}
 
 	public void MoveBlocksDown() {
-		GD.Print(blocks.Count);
+		//GD.Print(blocks.Count);
 		for(int i = 0; i < blocks.Count; i++) {
 			blocks[i].MoveDown();
 		}
+		UpdateScore();
 	}
 }
