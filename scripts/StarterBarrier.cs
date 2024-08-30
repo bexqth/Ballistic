@@ -24,8 +24,9 @@ public partial class StarterBarrier : Area2D
 	
 	
 	private void _on_body_entered(Node2D body)
-	{
+	{		
 		if(body is Ball ball) {
+			GD.Print("ball colided");
 			if(ballsCollided == 0) { // first went thro
 				ballLineCollided = true;
 				newStartingPosition = new Vector2(ball.Position.X, 755);
@@ -44,10 +45,18 @@ public partial class StarterBarrier : Area2D
 
 			//GD.Print("Collision detected with: ", body.Name);
 			//ball.restore(ball.Position.X);
-		} else if (body is Block block) {
-			
+		}
+		
+	}
+
+	private void _on_area_entered(Area2D area)
+	{
+		if (area.GetParent() is Block block) {
+			GD.Print("Block colided");
+			ballSpawn.endGame = true;
 		}
 	}
+
 }
 
 

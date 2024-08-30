@@ -12,6 +12,9 @@ public partial class BallSpawn : Node2D
 	private bool grabbed;
 	private Vector2 jumpDirection;
 	public bool roundDone{get;set;}
+	public bool endGame{get;set;}
+	[Export]
+	public Label gameLabel;
 	public override void _Ready()
 	{
 		this.ballsToShoot = numberOfBalls;
@@ -19,23 +22,28 @@ public partial class BallSpawn : Node2D
 		this.numberLabel = GetNode<Label>("Number_Label");
 		numberLabel.Text = ballsToShoot.ToString();
 		roundDone = false;
+		endGame = false;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (Input.IsActionJustPressed("left_click")) {
-			grabbed = true;
-		}
+		if(!endGame) {
+			if (Input.IsActionJustPressed("left_click")) {
+				grabbed = true;
+			}
 
-		if (grabbed) {
-			SetAngle();
-		}
+			if (grabbed) {
+				SetAngle();
+			}
 
-		if (grabbed && Input.IsActionJustReleased("left_click")) {
-			SpawnBall();
+			if (grabbed && Input.IsActionJustReleased("left_click")) {
+				SpawnBall();
+			}
+		} else {
+			gameLabel.ZIndex = 2;
+			gameLabel.Text = "Game over";
 		}
-
 	}
 
 	private void SetAngle() {

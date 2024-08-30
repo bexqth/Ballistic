@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public partial class Block : StaticBody2D
 {
 	// Called when the node enters the scene tree for the first time.
-	private ColorRect colorRect;
+	public ColorRect colorRect{get;set;}
 	public Label labelNumber{get;set;}
 	public int number{get;set;}
 	private int space = 10;
@@ -13,7 +13,7 @@ public partial class Block : StaticBody2D
 	private int step;
 	private bool signalConnected;
 	public List<Block> blocks{get;set;}
-	private Line2D line;
+	public Line2D line{get;set;}
 	private Color originalColor;
 	public int scoreAdd{get;set;}
 	public Label scoreLabel{get;set;}
@@ -101,10 +101,10 @@ public partial class Block : StaticBody2D
 		//global.totalScore++;
 		//GD.Print(scoreLabel);
 		int score = this.scoreLabel.Text.ToInt();
-		GD.Print(score);
+		//GD.Print(score);
 		score++;
 		this.scoreLabel.Text = score.ToString();
-		GD.Print("score +1");
+		//GD.Print("score +1");
 		LightUp();
 		
 	}

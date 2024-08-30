@@ -46,16 +46,18 @@ public partial class Global : Control
 	public override void _Process(double delta)
 	{
 		//GD.Print();
-		if(ballSpawn.roundDone == true) {
-			MoveBlocksDown();
-			SpawnBlocks();
-			ballSpawn.roundDone = false;
+		if(!ballSpawn.endGame) {
+			if(ballSpawn.roundDone == true) {
+				MoveBlocksDown();
+				SpawnBlocks();
+				ballSpawn.roundDone = false;
+			}
+		} else {
+			for(int i = 0; i < this.blocks.Count; i++) {
+				blocks[i].colorRect.Color = new Color("#474743");
+				blocks[i].line.DefaultColor = new Color("#474743");
+			}
 		}
-	}
-
-
-	public void UpdateScore() {
-
 	}
 
 	public void SpawnBlocks() {
@@ -88,6 +90,5 @@ public partial class Global : Control
 		for(int i = 0; i < blocks.Count; i++) {
 			blocks[i].MoveDown();
 		}
-		UpdateScore();
 	}
 }

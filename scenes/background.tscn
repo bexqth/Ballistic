@@ -107,11 +107,28 @@ shape = SubResource("RectangleShape2D_mymlk")
 [node name="Block" parent="." instance=ExtResource("2_tbwvj")]
 position = Vector2(250, 185)
 
-[node name="Ball_spawn" parent="." instance=ExtResource("4_c5jvu")]
+[node name="Ball_spawn" parent="." node_paths=PackedStringArray("gameLabel") instance=ExtResource("4_c5jvu")]
 position = Vector2(287, 753)
-numberOfBalls = 1
+numberOfBalls = 5
+gameLabel = NodePath("../Label_Game")
 
 [node name="Node2D" type="Node2D" parent="."]
 position = Vector2(10, 185)
 
+[node name="Label_Game" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -161.0
+offset_top = -41.5
+offset_right = 161.0
+offset_bottom = 41.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 80
+
+[connection signal="area_entered" from="Area2D_Line" to="Area2D_Line" method="_on_area_entered"]
 [connection signal="body_entered" from="Area2D_Line" to="Area2D_Line" method="_on_body_entered"]
