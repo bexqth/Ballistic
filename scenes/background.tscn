@@ -1,10 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://b7eh53142toww"]
+[gd_scene load_steps=11 format=3 uid="uid://b7eh53142toww"]
 
 [ext_resource type="Script" path="res://scripts/Global.cs" id="1_8khsq"]
 [ext_resource type="Script" path="res://scripts/StarterBarrier.cs" id="1_cgljc"]
 [ext_resource type="PackedScene" uid="uid://dnmycfkxovggk" path="res://scenes/block.tscn" id="2_tbwvj"]
 [ext_resource type="PackedScene" uid="uid://88biodfp84e8" path="res://scenes/ball_spawn.tscn" id="4_c5jvu"]
-[ext_resource type="Texture2D" uid="uid://chcl80s7534md" path="res://icon.svg" id="5_w42rh"]
 
 [sub_resource type="Gradient" id="Gradient_au3x6"]
 colors = PackedColorArray(0.172549, 0.00392157, 0.12549, 1, 0, 0.00392157, 0.0784314, 1)
@@ -135,15 +134,13 @@ theme_override_font_sizes/font_size = 80
 [node name="Node2D_Spawn_Position" type="Node2D" parent="."]
 position = Vector2(10, 105)
 
-[node name="Sprite2D" type="Sprite2D" parent="Node2D_Spawn_Position"]
-scale = Vector2(0.0976563, 0.09375)
-texture = ExtResource("5_w42rh")
-
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.002
 
 [node name="Timer_Wait" type="Timer" parent="."]
+wait_time = 0.2
 
 [connection signal="area_entered" from="Area2D_Line" to="Area2D_Line" method="_on_area_entered"]
 [connection signal="body_entered" from="Area2D_Line" to="Area2D_Line" method="_on_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Timer_Wait" to="." method="_on_timer_wait_timeout"]

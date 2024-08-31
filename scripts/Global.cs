@@ -61,10 +61,10 @@ public partial class Global : Control
 		//GD.Print();
 		if(!ballSpawn.endGame) {
 			if(ballSpawn.roundDone == true) {
-				//MoveBlocksDown();
-				shouldMoveBlocks = true;
+				//shouldMoveBlocks = true;
 				SpawnBlocks();
-				MoveBlocksDown();
+				//MoveBlocksDown();
+				waitBlockTimer.Start();
 				ballSpawn.roundDone = false;
 			}
 		} else {
@@ -132,6 +132,15 @@ public partial class Global : Control
 	{
 		MoveBlocksDown();
 	}
+	
+	private void _on_timer_wait_timeout()
+	{
+		shouldMoveBlocks = true;
+		MoveBlocksDown();
+		waitBlockTimer.Stop();
+	}
 }
+
+
 
 
