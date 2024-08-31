@@ -19,6 +19,7 @@ public partial class Block : StaticBody2D
 	public Label scoreLabel{get;set;}
 	private PackedScene particlesScene;
 
+
 	[Export]
 	public Ball ball;
 	public override void _Ready()
@@ -33,6 +34,7 @@ public partial class Block : StaticBody2D
 		this.step = this.space + this.blockHeight;
 		//this.Connect(nameof(Ball.BallCollided), new Callable(this, nameof(onBallCollided)));
 		particlesScene = GD.Load<PackedScene>("res://scenes/particles_2d.tscn");
+		
 	}
 
 
@@ -65,6 +67,14 @@ public partial class Block : StaticBody2D
 	public void MoveDown() {
 		var pos = Position;
 		pos.Y = this.Position.Y + this.step;
+		Position = pos;
+	
+	}
+
+	public void MoveDownABit() {
+		var bit = 5;
+		var pos = Position;
+		pos.Y = this.Position.Y + bit;
 		Position = pos;
 	}
 
@@ -115,6 +125,9 @@ public partial class Block : StaticBody2D
 		
 	}
 
+
 }
+
+
 
 

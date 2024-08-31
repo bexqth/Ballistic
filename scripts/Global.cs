@@ -10,6 +10,10 @@ public partial class Global : Control
 	public Block firstBlock;
 	[Export]
 	public Node2D node;
+
+	[Export]
+	public Node2D spawnNode;
+	private Vector2 spawnPosition;
 	private Vector2 nodePosition;
 	private Vector2 firstBlockPosition;
 	private int space = 10;
@@ -22,6 +26,10 @@ public partial class Global : Control
 	[Export]
 	public BallSpawn ballSpawn;
 	private int level;
+	private Timer moveBlockTimer;
+	private bool blockStop;
+	private bool shouldMoveBlocks = true;
+	private Timer waitBlockTimer;
 	//public static Global Instance { get; private set; }
 	public override void _Ready()
 	{
@@ -29,6 +37,8 @@ public partial class Global : Control
 		this.scoreLabel = this.scoreColorRect.GetNode<Label>("Label");
 		this.firstBlockPosition = firstBlock.Position;
 		this.nodePosition = node.Position;
+		this.spawnPosition = spawnNode.Position;
+
 		this.blocks = new List<Block>();
 		this.blocks.Add(firstBlock);
 		firstBlock.blocks = blocks;
@@ -40,6 +50,9 @@ public partial class Global : Control
 		this.scoreLabel.Text = this.totalScore.ToString();
 		//Instance = this;
 		//GD.Print(nodePosition);
+		this.moveBlockTimer = GetNode<Timer>("Timer");
+		this.waitBlockTimer = GetNode<Timer>("Timer_Wait");
+		this.blockStop = false;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -48,8 +61,10 @@ public partial class Global : Control
 		//GD.Print();
 		if(!ballSpawn.endGame) {
 			if(ballSpawn.roundDone == true) {
-				MoveBlocksDown();
+				//MoveBlocksDown();
+				shouldMoveBlocks = true;
 				SpawnBlocks();
+				MoveBlocksDown();
 				ballSpawn.roundDone = false;
 			}
 		} else {
@@ -72,8 +87,9 @@ public partial class Global : Control
 		for(int i = 0; i < numberOfNewBlocks; i++) {
 			PackedScene newBlockScene = GD.Load<PackedScene>("res://scenes/block.tscn");
 			Block newBlock = (Block)newBlockScene.Instantiate();
-			Vector2 newBlockPosition = new Vector2(nodePosition.X  + positions[i]*this.step - this.step, nodePosition.Y);
-			//GD.Print(newBlockPosition);
+			//Vector2 newBlockPosition = new Vector2(nodePosition.X  + positions[i]*this.step - this.step, nodePosition.Y);
+			Vector2 newBlockPosition = new Vector2(spawnPosition.X  + positions[i]*this.step - this.step, spawnPosition.Y);
+
 			newBlock.Position = newBlockPosition;
 			newBlock.blocks = blocks;
 			newBlock.scoreLabel = this.scoreLabel;
@@ -86,9 +102,36 @@ public partial class Global : Control
 	}
 
 	public void MoveBlocksDown() {
-		//GD.Print(blocks.Count);
-		for(int i = 0; i < blocks.Count; i++) {
-			blocks[i].MoveDown();
+		if (shouldMoveBlocks) {
+		for (int i = 0; i < blocks.Count; i++) {
+			blocks[i].MoveDownABit();
+		}
+		MoveSpawnNodeDownABit();
+		moveBlockTimer.Start();
+		} else {
+			moveBlockTimer.Stop();
+			spawnNode.Position = spawnPosition;
 		}
 	}
+
+	public void MoveSpawnNodeDownABit() {
+		var bit = 5;
+		var pos = spawnNode.Position;
+		pos.Y += bit;
+		spawnNode.Position = pos;
+
+		if (spawnNode.Position.Y >= 185) {
+			spawnNode.Position = spawnPosition;
+			shouldMoveBlocks = false;
+		}
+		//GD.Print(spawnNode.Position.Y);
+	}
+	
+	
+	private void _on_timer_timeout()
+	{
+		MoveBlocksDown();
+	}
 }
+
+
