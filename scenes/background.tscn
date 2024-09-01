@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b7eh53142toww"]
+[gd_scene load_steps=13 format=3 uid="uid://b7eh53142toww"]
 
 [ext_resource type="Script" path="res://scripts/Global.cs" id="1_8khsq"]
 [ext_resource type="Script" path="res://scripts/StarterBarrier.cs" id="1_cgljc"]
@@ -25,6 +25,17 @@ size = Vector2(572, 23)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mymlk"]
 size = Vector2(567, 25)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6uf4x"]
+bg_color = Color(0.303427, 0.635503, 0.849812, 1)
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id="Theme_t8f0e"]
+Button/styles/normal = SubResource("StyleBoxFlat_6uf4x")
 
 [node name="Background" type="Control" node_paths=PackedStringArray("firstBlock", "node", "spawnNode", "ballSpawn")]
 layout_mode = 3
@@ -140,7 +151,25 @@ wait_time = 0.002
 [node name="Timer_Wait" type="Timer" parent="."]
 wait_time = 0.2
 
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -43.0
+offset_top = 69.0
+offset_right = 67.0
+offset_bottom = 104.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_t8f0e")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Play again"
+
 [connection signal="area_entered" from="Area2D_Line" to="Area2D_Line" method="_on_area_entered"]
 [connection signal="body_entered" from="Area2D_Line" to="Area2D_Line" method="_on_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="Timer_Wait" to="." method="_on_timer_wait_timeout"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

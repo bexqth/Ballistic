@@ -30,6 +30,8 @@ public partial class Global : Control
 	private bool blockStop;
 	private bool shouldMoveBlocks = true;
 	private Timer waitBlockTimer;
+	private Button restartGameButton;
+	private Label gameOverLabel;
 	//public static Global Instance { get; private set; }
 	public override void _Ready()
 	{
@@ -53,6 +55,10 @@ public partial class Global : Control
 		this.moveBlockTimer = GetNode<Timer>("Timer");
 		this.waitBlockTimer = GetNode<Timer>("Timer_Wait");
 		this.blockStop = false;
+		restartGameButton = GetNode<Button>("Button");
+		this.restartGameButton.Visible = false;
+		gameOverLabel = GetNode<Label>("Label_Game");
+		gameOverLabel.Text = "";
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -72,6 +78,8 @@ public partial class Global : Control
 				blocks[i].colorRect.Color = new Color("#474743");
 				blocks[i].line.DefaultColor = new Color("#474743");
 			}
+			this.restartGameButton.ZIndex = 2;
+			this.restartGameButton.Visible = true;
 		}
 	}
 
@@ -127,7 +135,41 @@ public partial class Global : Control
 		//GD.Print(spawnNode.Position.Y);
 	}
 	
-	
+	public void RestartGame() {
+		GD.Print("Restarting game...");
+
+		// Dispose of existing blocks
+		for (int i = 0; i < this.blocks.Count; i++) {
+			if (IsInstanceValid(blocks[i])) {
+				GD.Print("Disposing block: ", blocks[i].Name);
+				blocks[i].QueueFree();
+			} else {
+				GD.Print("Block already disposed: ", blocks[i].Name);
+			}
+		}
+
+		// Clear the blocks list
+		this.blocks.Clear();
+
+		// Reinitialize firstBlock
+		PackedScene newBlockScene = GD.Load<PackedScene>("res://scenes/block.tscn");
+		firstBlock = (Block)newBlockScene.Instantiate();
+		GetTree().Root.AddChild(firstBlock);
+
+		firstBlock.Position = this.firstBlockPosition;
+		firstBlock.blocks = blocks;
+		firstBlock.scoreLabel = this.scoreLabel;
+		this.blocks.Add(firstBlock);
+
+		// Reset game state
+		this.scoreLabel.Text = "0";
+		this.restartGameButton.Visible = false;
+		ballSpawn.endGame = false;
+		gameOverLabel.Text = "";
+
+		GD.Print("Game restarted successfully.");
+	}
+
 	private void _on_timer_timeout()
 	{
 		MoveBlocksDown();
@@ -139,7 +181,14 @@ public partial class Global : Control
 		MoveBlocksDown();
 		waitBlockTimer.Stop();
 	}
+	
+	private void _on_button_pressed()
+	{
+		RestartGame();
+	}
 }
+
+
 
 
 
