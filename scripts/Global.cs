@@ -78,7 +78,7 @@ public partial class Global : Control
 				blocks[i].colorRect.Color = new Color("#474743");
 				blocks[i].line.DefaultColor = new Color("#474743");
 			}
-			this.restartGameButton.ZIndex = 2;
+			this.restartGameButton.ZIndex = 5;
 			this.restartGameButton.Visible = true;
 		}
 	}
@@ -164,9 +164,10 @@ public partial class Global : Control
 		// Reset game state
 		this.scoreLabel.Text = "0";
 		this.restartGameButton.Visible = false;
+		this.restartGameButton.ZIndex = 1;
 		ballSpawn.endGame = false;
 		gameOverLabel.Text = "";
-
+		level = 1;
 		GD.Print("Game restarted successfully.");
 	}
 
