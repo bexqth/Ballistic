@@ -45,6 +45,7 @@ scale = Vector2(0.046875, 1.90666)
 texture = ExtResource("2_xsk13")
 
 [node name="Timer_Shoot" type="Timer" parent="."]
+wait_time = 1.5
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 2.0

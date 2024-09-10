@@ -8,7 +8,7 @@ public partial class BallSpawn : Node2D
 	[Export]
 	public int numberOfBalls;
 	private int ballsToShoot;
-	private Timer ballTimer;
+	public Timer ballTimer;
 	private Label numberLabel;
 	private bool grabbed;
 	public Godot.Vector2 jumpDirection{get;set;}
@@ -16,7 +16,7 @@ public partial class BallSpawn : Node2D
 	public bool endGame{get;set;}
 	[Export]
 	public Label gameLabel;
-	private Timer shootTimer;
+	public Timer shootTimer;
 	private int minX = 20;
 	private int maxX = 535;
 	private int minY = 400;
@@ -39,12 +39,12 @@ public partial class BallSpawn : Node2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if(endGame) {
+		/*if(endGame) {
 			gameLabel.ZIndex = 2;
 			//gameLabel.Text = "Game over";
-			//timer.Start();
+			timer.Start();
 			endGame = false;
-		}
+		}*/
 
 	}
 
@@ -66,53 +66,63 @@ public partial class BallSpawn : Node2D
 	}
 
 	public void SpawnBall() {
-		if(ballsToShoot > 0) {
-			if(ballsToShoot == 0) {
-				this.Visible = false;
+		if(!endGame) {
+			if(ballsToShoot > 0) {
+				if(ballsToShoot == 0) {
+					this.Visible = false;
+				}
+				PackedScene newBallScene = GD.Load<PackedScene>("res://scenes/ball.tscn");
+				Ball newBall = (Ball)newBallScene.Instantiate();
+				newBall.Position = this.Position;
+				GetTree().Root.AddChild(newBall);
+				newBall.isFlying = true;
+
+				
+				RandomNumberGenerator rand = new RandomNumberGenerator();
+				rand.Randomize();
+				float randomX = rand.RandfRange(minX, maxX);
+				float randomY = rand.RandfRange(minY, maxY);
+				Godot.Vector2 newVector = new Godot.Vector2(randomX, randomY);
+				Godot.Vector2 newJumpDirection = (newVector - GlobalPosition).Normalized();
+				//GD.Print("new direction is" + newJumpDirection);
+				jumpDirection =  newJumpDirection;
+
+				//GD.Print("DIRECTION" + jumpDirection);
+				newBall.SetFlying(jumpDirection);
+				
+				ballsToShoot--;
+				numberLabel.Text = ballsToShoot.ToString();
+				ballTimer.Start();
 			}
-			PackedScene newBallScene = GD.Load<PackedScene>("res://scenes/ball.tscn");
-			Ball newBall = (Ball)newBallScene.Instantiate();
-			newBall.Position = this.Position;
-			GetTree().Root.AddChild(newBall);
-			newBall.isFlying = true;
-
-			
-			RandomNumberGenerator rand = new RandomNumberGenerator();
-			rand.Randomize();
-			float randomX = rand.RandfRange(minX, maxX);
-			float randomY = rand.RandfRange(minY, maxY);
-			Godot.Vector2 newVector = new Godot.Vector2(randomX, randomY);
-			Godot.Vector2 newJumpDirection = (newVector - GlobalPosition).Normalized();
-			GD.Print("new direction is" + newJumpDirection);
-			jumpDirection =  newJumpDirection;
-
-			GD.Print("DIRECTION" + jumpDirection);
-			newBall.SetFlying(jumpDirection);
-			
-			ballsToShoot--;
-			numberLabel.Text = ballsToShoot.ToString();
-			ballTimer.Start();
 		}
 	}
 	
 	 public void StartShooting()
 	{
-		shootTimer.Start();
+		if (!endGame)
+		{
+			shootTimer.Start();
+		}
 	}
 
 
 	private void _on_ball_timer_timeout()
 	{
-		SpawnBall();
+		if (!endGame)
+		{
+			SpawnBall();
+		}
 	}
 
 
 	private void _on_timer_shoot_timeout()
 	{
-		if (ballsToShoot > 0) {
+		if (ballsToShoot > 0 && !endGame)
+		{
 			SpawnBall();
 		}
-		else {
+		else
+		{
 			shootTimer.Stop();
 		}
 	}
@@ -126,6 +136,8 @@ public partial class BallSpawn : Node2D
 			SetAngle();
 			//GD.Print(jumpDirection);
 			SpawnBall();
+			//timer.Stop();
+			//endGame = false;
 		}
 	}
 }

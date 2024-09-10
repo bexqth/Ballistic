@@ -32,6 +32,8 @@ public partial class Global : Control
 	private Timer waitBlockTimer;
 	private Button restartGameButton;
 	private Label gameOverLabel;
+	private Timer gameOverTimer;
+	private bool gameOverTimerOut;
 	//public static Global Instance { get; private set; }
 	public override void _Ready()
 	{
@@ -59,13 +61,12 @@ public partial class Global : Control
 		this.restartGameButton.Visible = false;
 		gameOverLabel = GetNode<Label>("Label_Game");
 		gameOverLabel.Text = "";
+		this.gameOverTimer = GetNode<Timer>("Timer_GameOver");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		//Vector2 mousePosition = GetGlobalMousePosition();
-		//GD.Print(mousePosition);
 		//GD.Print();
 		if(!ballSpawn.endGame) {
 			if(ballSpawn.roundDone == true) {		
@@ -80,16 +81,25 @@ public partial class Global : Control
 				blocks[i].line.DefaultColor = new Color("#474743");
 			}
 			this.restartGameButton.ZIndex = 5;
-			this.restartGameButton.Visible = true;
-			RestartGame();
-			ballSpawn.timer.Start();
+			//this.restartGameButton.Visible = true;
+			gameOverLabel.Text = "Game Over";
+			
+			//gameOverTimer.Start();
+			//GD.Print("sdfsd");
+			//ballSpawn.timer.Start();
+			//if(gameOverTimerOut) {
+			//RestartGame();
+			//	gameOverTimerOut = false;
+			//}
+			//waitBlockTimer.Stop();
+			//moveBlockTimer.Stop();
 		}
 	}
 
 	public void SpawnBlocks() {
 
 		this.level++;
-		//GD.Print(level);
+		GD.Print(level);
 		var rnd = new Random();
 		int numberOfNewBlocks = rnd.Next(1,5);
 		var positions = Enumerable.Range(1,7).OrderBy(x => rnd.Next()).Take(numberOfNewBlocks).ToList();
@@ -136,7 +146,13 @@ public partial class Global : Control
 	}
 	
 	public void RestartGame() {
-		//GD.Print("Restarting game...");
+		
+		ballSpawn.shootTimer.Stop();
+		ballSpawn.ballTimer.Stop();
+		waitBlockTimer.Stop();
+		moveBlockTimer.Stop();
+
+		GD.Print("Restarting game...");
 
 		for (int i = 0; i < this.blocks.Count; i++) {
 			if (IsInstanceValid(blocks[i])) {
@@ -164,10 +180,11 @@ public partial class Global : Control
 		this.scoreLabel.Text = "0";
 		this.restartGameButton.Visible = false;
 		this.restartGameButton.ZIndex = 1;
-		ballSpawn.endGame = false;
 		gameOverLabel.Text = "";
 		level = 1;
-		//GD.Print("Game restarted successfully.");
+		GD.Print("Game restarted successfully.");
+		//gameOverTimer.Stop();
+		ballSpawn.endGame = false;
 	}
 
 	private void _on_timer_timeout()
@@ -186,7 +203,18 @@ public partial class Global : Control
 	{
 		RestartGame();
 	}
+	
+	private void _on_timer_game_over_timeout()
+	{
+		GD.Print("TIMEOUT");
+		RestartGame();
+		gameOverTimer.Stop();
+	}
 }
+
+
+
+
 
 
 

@@ -11,7 +11,8 @@ public partial class StarterBarrier : Area2D
 	private int maxX = 535;
 	private int minY = 400;
 	private int maxY = 500;
-
+	[Export]
+	public Timer gameOverTimer;
 	[Export]
 	public BallSpawn ballSpawn;
 	public override void _Ready()
@@ -58,6 +59,9 @@ public partial class StarterBarrier : Area2D
 		if (area.GetParent() is Block block) {
 			//GD.Print("Block colided");
 			ballSpawn.endGame = true;
+			gameOverTimer.Start();
+			ballSpawn.timer.Start();
+
 		}
 	}
 

@@ -24,7 +24,7 @@ size = Vector2(20, 705)
 size = Vector2(572, 23)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mymlk"]
-size = Vector2(567, 25)
+size = Vector2(567, 18)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6uf4x"]
 bg_color = Color(0.303427, 0.635503, 0.849812, 1)
@@ -107,13 +107,14 @@ physics_material_override = SubResource("PhysicsMaterial_qckwl")
 position = Vector2(285, 83)
 shape = SubResource("RectangleShape2D_14jqo")
 
-[node name="Area2D_Line" type="Area2D" parent="." node_paths=PackedStringArray("ballSpawn")]
+[node name="Area2D_Line" type="Area2D" parent="." node_paths=PackedStringArray("gameOverTimer", "ballSpawn")]
 position = Vector2(3, 754)
 script = ExtResource("1_cgljc")
+gameOverTimer = NodePath("../Timer_GameOver")
 ballSpawn = NodePath("../Ball_spawn")
 
 [node name="CollisionShape2D_Line" type="CollisionShape2D" parent="Area2D_Line"]
-position = Vector2(283.5, 33.5)
+position = Vector2(283.5, 37)
 shape = SubResource("RectangleShape2D_mymlk")
 
 [node name="Block" parent="." instance=ExtResource("2_tbwvj")]
@@ -149,7 +150,7 @@ position = Vector2(10, 105)
 wait_time = 0.002
 
 [node name="Timer_Wait" type="Timer" parent="."]
-wait_time = 0.2
+wait_time = 0.1
 
 [node name="Button" type="Button" parent="."]
 visible = false
@@ -171,9 +172,11 @@ theme_override_font_sizes/font_size = 17
 text = "Play again"
 
 [node name="Timer_GameOver" type="Timer" parent="."]
+wait_time = 1.5
 
 [connection signal="area_entered" from="Area2D_Line" to="Area2D_Line" method="_on_area_entered"]
 [connection signal="body_entered" from="Area2D_Line" to="Area2D_Line" method="_on_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="Timer_Wait" to="." method="_on_timer_wait_timeout"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="timeout" from="Timer_GameOver" to="." method="_on_timer_game_over_timeout"]
