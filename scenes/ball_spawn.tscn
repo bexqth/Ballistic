@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://88biodfp84e8"]
+[gd_scene load_steps=5 format=3 uid="uid://88biodfp84e8"]
 
 [ext_resource type="Script" path="res://scripts/BallSpawn.cs" id="1_15f42"]
+[ext_resource type="Texture2D" uid="uid://chcl80s7534md" path="res://icon.svg" id="2_xsk13"]
 
 [sub_resource type="Gradient" id="Gradient_ey0tv"]
 offsets = PackedFloat32Array(0, 0.546135, 0.553616, 1)
@@ -35,4 +36,19 @@ horizontal_alignment = 1
 [node name="Ball_Timer" type="Timer" parent="."]
 wait_time = 0.2
 
+[node name="Node2D" type="Node2D" parent="."]
+visible = false
+
+[node name="Rotation_Pointer" type="Sprite2D" parent="Node2D"]
+position = Vector2(0, -122)
+scale = Vector2(0.046875, 1.90666)
+texture = ExtResource("2_xsk13")
+
+[node name="Timer_Shoot" type="Timer" parent="."]
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+
 [connection signal="timeout" from="Ball_Timer" to="." method="_on_ball_timer_timeout"]
+[connection signal="timeout" from="Timer_Shoot" to="." method="_on_timer_shoot_timeout"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

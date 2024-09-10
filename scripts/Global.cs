@@ -64,14 +64,15 @@ public partial class Global : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		//Vector2 mousePosition = GetGlobalMousePosition();
+		//GD.Print(mousePosition);
 		//GD.Print();
 		if(!ballSpawn.endGame) {
-			if(ballSpawn.roundDone == true) {
-				//shouldMoveBlocks = true;
+			if(ballSpawn.roundDone == true) {		
 				SpawnBlocks();
-				//MoveBlocksDown();
 				waitBlockTimer.Start();
 				ballSpawn.roundDone = false;
+				ballSpawn.StartShooting();
 			}
 		} else {
 			for(int i = 0; i < this.blocks.Count; i++) {
@@ -80,22 +81,21 @@ public partial class Global : Control
 			}
 			this.restartGameButton.ZIndex = 5;
 			this.restartGameButton.Visible = true;
+			RestartGame();
+			ballSpawn.timer.Start();
 		}
 	}
 
 	public void SpawnBlocks() {
-		
-		//int numberOfNewBlocks = 7;
-		//int[] positions = new int[7] {1,2,3,4,5,6,7}; //MAX IS 7
+
 		this.level++;
-		GD.Print(level);
+		//GD.Print(level);
 		var rnd = new Random();
 		int numberOfNewBlocks = rnd.Next(1,5);
 		var positions = Enumerable.Range(1,7).OrderBy(x => rnd.Next()).Take(numberOfNewBlocks).ToList();
 		for(int i = 0; i < numberOfNewBlocks; i++) {
 			PackedScene newBlockScene = GD.Load<PackedScene>("res://scenes/block.tscn");
 			Block newBlock = (Block)newBlockScene.Instantiate();
-			//Vector2 newBlockPosition = new Vector2(nodePosition.X  + positions[i]*this.step - this.step, nodePosition.Y);
 			Vector2 newBlockPosition = new Vector2(spawnPosition.X  + positions[i]*this.step - this.step, spawnPosition.Y);
 
 			newBlock.Position = newBlockPosition;
@@ -132,19 +132,18 @@ public partial class Global : Control
 			spawnNode.Position = spawnPosition;
 			shouldMoveBlocks = false;
 		}
-		//GD.Print(spawnNode.Position.Y);
+
 	}
 	
 	public void RestartGame() {
-		GD.Print("Restarting game...");
+		//GD.Print("Restarting game...");
 
-		// Dispose of existing blocks
 		for (int i = 0; i < this.blocks.Count; i++) {
 			if (IsInstanceValid(blocks[i])) {
-				GD.Print("Disposing block: ", blocks[i].Name);
+				//GD.Print("Disposing block: ", blocks[i].Name);
 				blocks[i].QueueFree();
 			} else {
-				GD.Print("Block already disposed: ", blocks[i].Name);
+				//GD.Print("Block already disposed: ", blocks[i].Name);
 			}
 		}
 
@@ -168,7 +167,7 @@ public partial class Global : Control
 		ballSpawn.endGame = false;
 		gameOverLabel.Text = "";
 		level = 1;
-		GD.Print("Game restarted successfully.");
+		//GD.Print("Game restarted successfully.");
 	}
 
 	private void _on_timer_timeout()
