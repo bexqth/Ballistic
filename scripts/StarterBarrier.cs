@@ -42,6 +42,7 @@ public partial class StarterBarrier : Area2D
 			}
 			if(ballsCollided == ballSpawn.numberOfBalls) {
 				ballsCollided = 0;
+				
 				ballSpawn.Restore();
 				
 			}

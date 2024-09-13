@@ -22,7 +22,7 @@ public partial class BallSpawn : Node2D
 	private int minY = 400;
 	private int maxY = 500;
 	public Timer timer{get;set;}
-
+	private RandomNumberGenerator rand;
 	public override void _Ready()
 	{
 		this.ballsToShoot = numberOfBalls;
@@ -33,6 +33,8 @@ public partial class BallSpawn : Node2D
 		numberLabel.Text = ballsToShoot.ToString();
 		roundDone = false;
 		endGame = false;
+		rand = new RandomNumberGenerator();
+		rand.Randomize();
 		this.timer.Start();
 	}
 
@@ -49,24 +51,46 @@ public partial class BallSpawn : Node2D
 	}
 
 	private void SetAngle() {
-		Godot.Vector2 mousePosition = new Godot.Vector2((float)-0.3277063, (float)-0.94477963);
-			LookAt(mousePosition);
-			jumpDirection = (mousePosition - GlobalPosition).Normalized();
+		//Godot.Vector2 mousePosition = new Godot.Vector2((float)-0.3277063, (float)-0.94477963);
+
+			//LookAt(mousePosition);
+			//jumpDirection = (mousePosition - GlobalPosition).Normalized();
 			//GD.Print(jumpDirection);
-		
+		GenerateNewDirection();
 	}
 
 	public void Restore() {
+		/*ballsToShoot = numberOfBalls;
+		grabbed = false;
+		ballTimer.Stop();
+		numberLabel.Text = ballsToShoot.ToString();
+		roundDone = true;
+
+		/*RandomNumberGenerator rand = new RandomNumberGenerator();
+		rand.Randomize();
+		float randomX = rand.RandfRange(minX, maxX);
+		float randomY = rand.RandfRange(minY, maxY);
+		Godot.Vector2 newVector = new Godot.Vector2(randomX, randomY);
+		Godot.Vector2 newJumpDirection = (newVector - GlobalPosition).Normalized();
+		GD.Print("new direction is" + newJumpDirection);
+		jumpDirection =  newJumpDirection;*/
+
+		//StartShooting(); 
 		ballsToShoot = numberOfBalls;
 		grabbed = false;
 		ballTimer.Stop();
 		numberLabel.Text = ballsToShoot.ToString();
 		roundDone = true;
-		StartShooting(); 
+
+		// Generate the direction once here
+		GenerateNewDirection();
+
+		StartShooting();
 	}
 
 	public void SpawnBall() {
-		if(!endGame) {
+		/*if(!endGame) {
+
 			if(ballsToShoot > 0) {
 				if(ballsToShoot == 0) {
 					this.Visible = false;
@@ -76,25 +100,60 @@ public partial class BallSpawn : Node2D
 				newBall.Position = this.Position;
 				GetTree().Root.AddChild(newBall);
 				newBall.isFlying = true;
-
 				
-				RandomNumberGenerator rand = new RandomNumberGenerator();
+				/*RandomNumberGenerator rand = new RandomNumberGenerator();
 				rand.Randomize();
 				float randomX = rand.RandfRange(minX, maxX);
 				float randomY = rand.RandfRange(minY, maxY);
 				Godot.Vector2 newVector = new Godot.Vector2(randomX, randomY);
 				Godot.Vector2 newJumpDirection = (newVector - GlobalPosition).Normalized();
 				//GD.Print("new direction is" + newJumpDirection);
-				jumpDirection =  newJumpDirection;
+				jumpDirection =  newJumpDirection;*/
 
-				//GD.Print("DIRECTION" + jumpDirection);
+				/*GD.Print("DIRECTION" + jumpDirection);
 				newBall.SetFlying(jumpDirection);
 				
 				ballsToShoot--;
 				numberLabel.Text = ballsToShoot.ToString();
 				ballTimer.Start();
+			} 
+			
+		}*/
+		if (!endGame)
+		{
+			if (ballsToShoot > 0)
+			{
+				if (ballsToShoot == 0)
+				{
+					this.Visible = false;
+				}
+				PackedScene newBallScene = GD.Load<PackedScene>("res://scenes/ball.tscn");
+				Ball newBall = (Ball)newBallScene.Instantiate();
+				newBall.Position = this.Position;
+				GetTree().Root.AddChild(newBall);
+				newBall.isFlying = true;
+
+				// Use the pre-generated direction
+				GD.Print("DIRECTION" + jumpDirection);
+				newBall.SetFlying(jumpDirection);
+
+				ballsToShoot--;
+				numberLabel.Text = ballsToShoot.ToString();
+				ballTimer.Start();
 			}
 		}
+	}
+
+	private void GenerateNewDirection()
+	{
+		RandomNumberGenerator rand = new RandomNumberGenerator();
+		rand.Randomize();
+		float randomX = rand.RandfRange(minX, maxX);
+		float randomY = rand.RandfRange(minY, maxY);
+		Godot.Vector2 newVector = new Godot.Vector2(randomX, randomY);
+		Godot.Vector2 newJumpDirection = (newVector - GlobalPosition).Normalized();
+		GD.Print("new direction is" + newJumpDirection);
+		jumpDirection = newJumpDirection;
 	}
 	
 	 public void StartShooting()
