@@ -17,8 +17,12 @@ public partial class Block : StaticBody2D
 	private Color originalColor;
 	public int scoreAdd{get;set;}
 	public Label scoreLabel{get;set;}
+	public Label scoreLabel2{get;set;}
+	public Label scoreLabel3{get;set;}
 	private PackedScene particlesScene;
-
+	public int scoreOne;
+	public int scoreTwo;
+	public int scoreThree;
 
 	[Export]
 	public Ball ball;
@@ -110,13 +114,28 @@ public partial class Block : StaticBody2D
 		this.updateLabelNumber();
 		//global.totalScore++;
 		//GD.Print(scoreLabel);
-		int score = this.scoreLabel.Text.ToInt();
-		//GD.Print(score);
-		score++;
-		this.scoreLabel.Text = score.ToString();
+		//int score1 = this.scoreLabel.Text.ToInt();
+		//score1++;
+	    //this.scoreLabel.Text = score1.ToString();
 		//GD.Print("score +1");
 		LightUp();
-		
+		if(body is Ball ball) {
+			GD.Print("sdsdfsdf");
+			if(ball.number == 1) {
+				int score1 = this.scoreLabel.Text.ToInt();
+				score1++;
+	    		this.scoreLabel.Text = score1.ToString();
+			} else if (ball.number == 2) {
+				int score2 = this.scoreLabel2.Text.ToInt();
+				score2++;
+	    		this.scoreLabel2.Text = score2.ToString();		
+			} else if(ball.number == 3) {
+				int score3 = this.scoreLabel3.Text.ToInt();
+				score3++;
+	    		this.scoreLabel3.Text = score3.ToString();
+			}
+		}
+		//this.scoreLabel.Text = this.scoreOne + " " + this.scoreTwo + " " + this.scoreThree;
 	}
 	
 	private void _on_area_2d_body_exited(Node2D body)

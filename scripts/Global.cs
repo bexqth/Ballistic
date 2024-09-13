@@ -21,6 +21,8 @@ public partial class Global : Control
 	private int step;
 	private List<Block> blocks;
 	private Label scoreLabel;
+	private Label scoreLabel2;
+	private Label scoreLabel3;
 	private ColorRect scoreColorRect;
 	public int totalScore{get;set;}
 	[Export]
@@ -34,11 +36,16 @@ public partial class Global : Control
 	private Label gameOverLabel;
 	private Timer gameOverTimer;
 	private bool gameOverTimerOut;
+	public int scoreOne;
+	public int scoreTwo;
+	public int scoreThree;
 	//public static Global Instance { get; private set; }
 	public override void _Ready()
 	{
 		this.scoreColorRect = GetNode<ColorRect>("ColorRect");
 		this.scoreLabel = this.scoreColorRect.GetNode<Label>("Label");
+		this.scoreLabel2 = this.scoreColorRect.GetNode<Label>("Label2");
+		this.scoreLabel3 = this.scoreColorRect.GetNode<Label>("Label3");
 		this.firstBlockPosition = firstBlock.Position;
 		this.nodePosition = node.Position;
 		this.spawnPosition = spawnNode.Position;
@@ -47,11 +54,20 @@ public partial class Global : Control
 		this.blocks.Add(firstBlock);
 		firstBlock.blocks = blocks;
 		firstBlock.scoreLabel = this.scoreLabel;
+		firstBlock.scoreLabel2 = this.scoreLabel2;
+		firstBlock.scoreLabel3 = this.scoreLabel3;
+
+		firstBlock.scoreOne = this.scoreOne;
+		firstBlock.scoreTwo = this.scoreTwo;
+		firstBlock.scoreThree = this.scoreThree;
+
 		//firstBlock.scoreAdd = totalScore;
 		this.step = this.space + this.blockHeight;
 		this.totalScore = 0;
 		this.level = 1;
-		this.scoreLabel.Text = this.totalScore.ToString();
+		this.scoreLabel.Text = this.scoreOne.ToString();
+		this.scoreLabel2.Text = this.scoreTwo.ToString();
+		this.scoreLabel3.Text = this.scoreThree.ToString();
 		//Instance = this;
 		//GD.Print(nodePosition);
 		this.moveBlockTimer = GetNode<Timer>("Timer");
@@ -111,6 +127,11 @@ public partial class Global : Control
 			newBlock.Position = newBlockPosition;
 			newBlock.blocks = blocks;
 			newBlock.scoreLabel = this.scoreLabel;
+			newBlock.scoreLabel2 = this.scoreLabel2;
+			newBlock.scoreLabel3 = this.scoreLabel3;
+			newBlock.scoreOne = this.scoreOne;
+			newBlock.scoreTwo = this.scoreTwo;
+			newBlock.scoreThree = this.scoreThree;
 
 			blocks.Add(newBlock);
 			GetTree().Root.AddChild(newBlock);
@@ -174,10 +195,18 @@ public partial class Global : Control
 		firstBlock.Position = this.firstBlockPosition;
 		firstBlock.blocks = blocks;
 		firstBlock.scoreLabel = this.scoreLabel;
+		firstBlock.scoreLabel2 = this.scoreLabel2;
+		firstBlock.scoreLabel3 = this.scoreLabel3;
+
+		firstBlock.scoreOne = this.scoreOne;
+		firstBlock.scoreTwo = this.scoreTwo;
+		firstBlock.scoreThree = this.scoreThree;
+
 		this.blocks.Add(firstBlock);
 
-		// Reset game state
 		this.scoreLabel.Text = "0";
+		this.scoreLabel2.Text = "0";
+		this.scoreLabel3.Text = "0";
 		this.restartGameButton.Visible = false;
 		this.restartGameButton.ZIndex = 1;
 		gameOverLabel.Text = "";

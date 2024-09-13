@@ -9,7 +9,7 @@ public partial class Ball : CharacterBody2D
 	private float jumpForce = 1000f;
 	private float gravity = 30f;
 	private Timer ballTimer;
-
+	public int number{get;set;}
 	
 	[Signal]
 	public delegate void BallCollidedEventHandler(Ball ball);
