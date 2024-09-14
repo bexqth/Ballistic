@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b7eh53142toww"]
+[gd_scene load_steps=15 format=3 uid="uid://b7eh53142toww"]
 
 [ext_resource type="Script" path="res://scripts/Global.cs" id="1_8khsq"]
 [ext_resource type="Script" path="res://scripts/StarterBarrier.cs" id="1_cgljc"]
@@ -37,7 +37,15 @@ corner_radius_bottom_left = 5
 [sub_resource type="Theme" id="Theme_t8f0e"]
 Button/styles/normal = SubResource("StyleBoxFlat_6uf4x")
 
-[node name="Background" type="Control" node_paths=PackedStringArray("firstBlock", "node", "spawnNode", "ballSpawn")]
+[sub_resource type="Gradient" id="Gradient_fqgs6"]
+colors = PackedColorArray(0.172549, 0.00392157, 0.12549, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_i2qg5"]
+gradient = SubResource("Gradient_fqgs6")
+fill_from = Vector2(0.512821, 0.183761)
+fill_to = Vector2(0.5, 1)
+
+[node name="Background" type="Control" node_paths=PackedStringArray("firstBlock", "node", "spawnNode", "ballSpawn", "starterBarrier")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -50,6 +58,7 @@ firstBlock = NodePath("Block")
 node = NodePath("Node2D")
 spawnNode = NodePath("Node2D_Spawn_Position")
 ballSpawn = NodePath("Ball_spawn")
+starterBarrier = NodePath("Area2D_Line")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -157,8 +166,9 @@ shape = SubResource("RectangleShape2D_mymlk")
 position = Vector2(250, 185)
 
 [node name="Ball_spawn" parent="." node_paths=PackedStringArray("gameLabel") instance=ExtResource("4_c5jvu")]
+visible = false
 position = Vector2(287, 753)
-numberOfBalls = 3
+numberOfBalls = 1
 gameLabel = NodePath("../Label_Game")
 
 [node name="Node2D" type="Node2D" parent="."]
@@ -210,9 +220,66 @@ text = "Play again"
 [node name="Timer_GameOver" type="Timer" parent="."]
 wait_time = 1.5
 
+[node name="TextureRect_Fade" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_i2qg5")
+
+[node name="Button_Set" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 6.0
+offset_top = -8.0
+offset_right = 63.0
+offset_bottom = 23.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_t8f0e")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 17
+text = "Set"
+
+[node name="TextEdit_NumberOfPlayers" type="TextEdit" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -53.0
+offset_top = -10.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "1"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -75.0
+offset_top = -36.0
+offset_right = 74.0
+offset_bottom = -13.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Number of players:"
+
 [connection signal="area_entered" from="Area2D_Line" to="Area2D_Line" method="_on_area_entered"]
 [connection signal="body_entered" from="Area2D_Line" to="Area2D_Line" method="_on_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="Timer_Wait" to="." method="_on_timer_wait_timeout"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
 [connection signal="timeout" from="Timer_GameOver" to="." method="_on_timer_game_over_timeout"]
+[connection signal="pressed" from="Button_Set" to="." method="_on_button_set_pressed"]

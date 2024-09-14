@@ -39,9 +39,22 @@ public partial class Global : Control
 	public int scoreOne;
 	public int scoreTwo;
 	public int scoreThree;
+	public int numberOfPlayers{get;set;}
+	private TextureRect fadeTextureRect;
+	private TextEdit numberOfPlayersTextEdit;
+	private Label numberOfPlayersLabel;
+	private Button numberOfPlayersButton;
+	private bool gameCanStart;
+	private List<BallSpawn> ballSpawns;
+
+	[Export]
+	public StarterBarrier starterBarrier;	
 	//public static Global Instance { get; private set; }
 	public override void _Ready()
 	{
+		this.gameCanStart = false;
+		this.ballSpawns = new List<BallSpawn>();
+
 		this.scoreColorRect = GetNode<ColorRect>("ColorRect");
 		this.scoreLabel = this.scoreColorRect.GetNode<Label>("Label");
 		this.scoreLabel2 = this.scoreColorRect.GetNode<Label>("Label2");
@@ -78,37 +91,41 @@ public partial class Global : Control
 		gameOverLabel = GetNode<Label>("Label_Game");
 		gameOverLabel.Text = "";
 		this.gameOverTimer = GetNode<Timer>("Timer_GameOver");
+
+		this.fadeTextureRect = GetNode<TextureRect>("TextureRect_Fade");
+		this.numberOfPlayersTextEdit = GetNode<TextEdit>("TextEdit_NumberOfPlayers");
+		this.numberOfPlayersLabel = GetNode<Label>("Label");
+		this.numberOfPlayersButton = GetNode<Button>("Button_Set");
+
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 		//GD.Print();
-		if(!ballSpawn.endGame) {
-			if(ballSpawn.roundDone == true) {		
-				SpawnBlocks();
-				waitBlockTimer.Start();
-				ballSpawn.roundDone = false;
-				ballSpawn.StartShooting();
+		if(gameCanStart == false) {
+			if(!ballSpawn.endGame) {
+				if(ballSpawn.roundDone == true) {		
+					SpawnBlocks();
+					waitBlockTimer.Start();
+					ballSpawn.roundDone = false;
+					//ballSpawn.StartShooting();
+					ballSpawsStartShooting();
+				}
+			} else {
+				for(int i = 0; i < this.blocks.Count; i++) {
+					blocks[i].colorRect.Color = new Color("#474743");
+					blocks[i].line.DefaultColor = new Color("#474743");
+				}
+				this.restartGameButton.ZIndex = 5;
+				gameOverLabel.Text = "Game Over";
 			}
-		} else {
-			for(int i = 0; i < this.blocks.Count; i++) {
-				blocks[i].colorRect.Color = new Color("#474743");
-				blocks[i].line.DefaultColor = new Color("#474743");
-			}
-			this.restartGameButton.ZIndex = 5;
-			//this.restartGameButton.Visible = true;
-			gameOverLabel.Text = "Game Over";
-			
-			//gameOverTimer.Start();
-			//GD.Print("sdfsd");
-			//ballSpawn.timer.Start();
-			//if(gameOverTimerOut) {
-			//RestartGame();
-			//	gameOverTimerOut = false;
-			//}
-			//waitBlockTimer.Stop();
-			//moveBlockTimer.Stop();
+		}
+	}
+
+	public void ballSpawsStartShooting() {
+		for(int i = 0; i < this.ballSpawns.Count; i++) {
+			ballSpawns[i].StartShooting();
 		}
 	}
 
@@ -177,17 +194,14 @@ public partial class Global : Control
 
 		for (int i = 0; i < this.blocks.Count; i++) {
 			if (IsInstanceValid(blocks[i])) {
-				//GD.Print("Disposing block: ", blocks[i].Name);
 				blocks[i].QueueFree();
 			} else {
-				//GD.Print("Block already disposed: ", blocks[i].Name);
+
 			}
 		}
 
-		// Clear the blocks list
 		this.blocks.Clear();
 
-		// Reinitialize firstBlock
 		PackedScene newBlockScene = GD.Load<PackedScene>("res://scenes/block.tscn");
 		firstBlock = (Block)newBlockScene.Instantiate();
 		GetTree().Root.AddChild(firstBlock);
@@ -212,8 +226,29 @@ public partial class Global : Control
 		gameOverLabel.Text = "";
 		level = 1;
 		GD.Print("Game restarted successfully.");
-		//gameOverTimer.Stop();
 		ballSpawn.endGame = false;
+	}
+
+	public void setPlayers() {
+		int playerNumber = 1;
+		int xStep = 570 / (this.numberOfPlayers + 1);
+		for(int i = 0; i < this.numberOfPlayers; i++) {
+			PackedScene newBallSpawnScene = GD.Load<PackedScene>("res://scenes/ball_spawn.tscn");
+			BallSpawn newBallSpawn = (BallSpawn)newBallSpawnScene.Instantiate();
+			this.ballSpawns.Add(newBallSpawn);
+			GetTree().Root.AddChild(newBallSpawn);
+			newBallSpawn.numberOfBalls = 1;
+			newBallSpawn.spawnIndex = playerNumber;
+			newBallSpawn.Position = new Vector2(xStep*playerNumber,755);
+			playerNumber++;
+		}
+		StartBallSpawns();
+	}
+
+	public void StartBallSpawns() {
+		for(int i = 0; i < this.ballSpawns.Count; i++) {
+			ballSpawns[i].timer.Start();
+		}
 	}
 
 	private void _on_timer_timeout()
@@ -239,7 +274,22 @@ public partial class Global : Control
 		RestartGame();
 		gameOverTimer.Stop();
 	}
+	
+	private void _on_button_set_pressed()
+	{
+		this.numberOfPlayers = numberOfPlayersTextEdit.Text.ToInt();
+		this.setPlayers();
+		starterBarrier.ballspawns = this.ballSpawns;
+		fadeTextureRect.Visible = false;
+		numberOfPlayersButton.Visible = false;
+		numberOfPlayersLabel.Visible = false;
+		numberOfPlayersTextEdit.Visible = false;
+		this.gameCanStart = true;
+		
+	}
 }
+
+
 
 
 

@@ -16,6 +16,7 @@ fill_from = Vector2(0.5, 0.5)
 
 [node name="Ball_spawn" type="Node2D"]
 script = ExtResource("1_15f42")
+numberOfBalls = 1
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = SubResource("GradientTexture2D_ruryk")

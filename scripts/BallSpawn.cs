@@ -23,6 +23,14 @@ public partial class BallSpawn : Node2D
 	private int maxY = 500;
 	int ballIndex = 1;
 	public Timer timer{get;set;}
+	public int spawnIndex{get;set;}
+
+	public int Index { get; set; }
+    public int ballsCollided { get; set; } = 0; // Initialize to 0
+    public bool ballLineCollided { get; set; } = false;
+    public Godot.Vector2 newStartingPosition { get; set; }
+
+
 	private RandomNumberGenerator rand;
 	public override void _Ready()
 	{
@@ -36,7 +44,7 @@ public partial class BallSpawn : Node2D
 		endGame = false;
 		rand = new RandomNumberGenerator();
 		rand.Randomize();
-		this.timer.Start();
+		//this.timer.Start();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -81,9 +89,10 @@ public partial class BallSpawn : Node2D
 				newBall.Position = this.Position;
 				GetTree().Root.AddChild(newBall);
 				newBall.isFlying = true;
-				newBall.number = ballIndex;
-				ballIndex++;
-				
+				//newBall.number = ballIndex;
+				//ballIndex++;
+				newBall.spawnIndex = this.spawnIndex;
+
 				GD.Print("DIRECTION" + jumpDirection);
 				newBall.SetFlying(jumpDirection);
 
@@ -140,8 +149,8 @@ public partial class BallSpawn : Node2D
 	{
 		if (!endGame)
 		{
-			gameLabel.ZIndex = 1;
-			gameLabel.Text = "";
+			//gameLabel.ZIndex = 1;
+			//gameLabel.Text = "";
 			SetAngle();
 			//GD.Print(jumpDirection);
 			SpawnBall();

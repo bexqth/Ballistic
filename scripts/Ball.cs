@@ -10,6 +10,7 @@ public partial class Ball : CharacterBody2D
 	private float gravity = 30f;
 	private Timer ballTimer;
 	public int number{get;set;}
+	public int spawnIndex{get;set;}
 	
 	[Signal]
 	public delegate void BallCollidedEventHandler(Ball ball);
