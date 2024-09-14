@@ -17,6 +17,8 @@ public partial class StarterBarrier : Area2D
 	[Export]
 	public BallSpawn ballSpawn;
 	public List<BallSpawn> ballspawns{get;set;}
+	public bool endGame{get;set;}
+	public bool roundDone{get;set;}
 	public override void _Ready()
 	{
 		ballsCollided = 0;
@@ -51,16 +53,39 @@ public partial class StarterBarrier : Area2D
 			ballSpawn.Visible = true;
 		}*/
 		
-		
+		if(body is Ball ball) {
+			for(int i = 0; i < ballspawns.Count; i++) {
+				if(ballspawns[i].spawnIndex == ball.spawnIndex) {
+					newStartingPosition = new Vector2(ball.Position.X, 755);
+					ballspawns[i].Position = newStartingPosition;
+					//ballspawns[i].Restore();
+					ballspawns[i].Visible = true;
+					ballsCollided++;
+				}
+			} 
+
+			if(ballsCollided == ballspawns.Count) {
+				this.roundDone = true;
+				ballsCollided = 0;
+				GD.Print("ROUND DONE");
+				for(int i = 0; i < ballspawns.Count; i++) {
+					ballspawns[i].Restore();
+				}
+			}
+		}
+
 	}
 
 	private void _on_area_entered(Area2D area)
 	{
 		if (area.GetParent() is Block block) {
 			//GD.Print("Block colided");
-			ballSpawn.endGame = true;
+			endGame = true;
 			gameOverTimer.Start();
-			ballSpawn.timer.Start();
+			//ballSpawn.timer.Start();
+			for(int i = 0; i < this.ballspawns.Count; i++) {
+				ballspawns[i].timer.Start();
+			}
 
 		}
 	}

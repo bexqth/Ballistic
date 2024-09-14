@@ -120,7 +120,7 @@ public partial class Block : StaticBody2D
 		//GD.Print("score +1");
 		LightUp();
 		if(body is Ball ball) {
-			GD.Print("sdsdfsdf");
+			//GD.Print("sdsdfsdf");
 			if(ball.number == 1) {
 				int score1 = this.scoreLabel.Text.ToInt();
 				score1++;

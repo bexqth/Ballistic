@@ -49,11 +49,15 @@ public partial class Global : Control
 
 	[Export]
 	public StarterBarrier starterBarrier;	
+	public bool endGame{get;set;}
+	public bool roundDone{get;set;}
 	//public static Global Instance { get; private set; }
 	public override void _Ready()
 	{
 		this.gameCanStart = false;
 		this.ballSpawns = new List<BallSpawn>();
+		roundDone = false;
+		endGame = false;
 
 		this.scoreColorRect = GetNode<ColorRect>("ColorRect");
 		this.scoreLabel = this.scoreColorRect.GetNode<Label>("Label");
@@ -97,18 +101,22 @@ public partial class Global : Control
 		this.numberOfPlayersLabel = GetNode<Label>("Label");
 		this.numberOfPlayersButton = GetNode<Button>("Button_Set");
 
+		//this.starterBarrier.endGame = this.endGame;
+		//this.starterBarrier.roundDone = this.roundDone;
+
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 		//GD.Print();
-		if(gameCanStart == false) {
-			if(!ballSpawn.endGame) {
-				if(ballSpawn.roundDone == true) {		
+		if(gameCanStart) {
+			if(!starterBarrier.endGame) {
+				if(starterBarrier.roundDone == true) {		
+					GD.Print("SPAWN BLOCKS");
 					SpawnBlocks();
 					waitBlockTimer.Start();
-					ballSpawn.roundDone = false;
+					starterBarrier.roundDone = false;
 					//ballSpawn.StartShooting();
 					ballSpawsStartShooting();
 				}
@@ -190,7 +198,7 @@ public partial class Global : Control
 		waitBlockTimer.Stop();
 		moveBlockTimer.Stop();
 
-		GD.Print("Restarting game...");
+		//GD.Print("Restarting game...");
 
 		for (int i = 0; i < this.blocks.Count; i++) {
 			if (IsInstanceValid(blocks[i])) {
@@ -225,13 +233,13 @@ public partial class Global : Control
 		this.restartGameButton.ZIndex = 1;
 		gameOverLabel.Text = "";
 		level = 1;
-		GD.Print("Game restarted successfully.");
+		//GD.Print("Game restarted successfully.");
 		ballSpawn.endGame = false;
 	}
 
 	public void setPlayers() {
 		int playerNumber = 1;
-		int xStep = 570 / (this.numberOfPlayers + 1);
+		int xStep = (570) / (this.numberOfPlayers + 1);
 		for(int i = 0; i < this.numberOfPlayers; i++) {
 			PackedScene newBallSpawnScene = GD.Load<PackedScene>("res://scenes/ball_spawn.tscn");
 			BallSpawn newBallSpawn = (BallSpawn)newBallSpawnScene.Instantiate();
@@ -240,6 +248,16 @@ public partial class Global : Control
 			newBallSpawn.numberOfBalls = 1;
 			newBallSpawn.spawnIndex = playerNumber;
 			newBallSpawn.Position = new Vector2(xStep*playerNumber,755);
+
+			Label playerLabel = new Label();
+			playerLabel.Text = "0";
+			playerLabel.Position = new Vector2((xStep - 20) * playerNumber, 5);
+			playerLabel.AddThemeFontSizeOverride("font_size", 64);
+
+			// Add the label to the scene
+			GetTree().Root.AddChild(playerLabel);
+
+
 			playerNumber++;
 		}
 		StartBallSpawns();
@@ -270,7 +288,7 @@ public partial class Global : Control
 	
 	private void _on_timer_game_over_timeout()
 	{
-		GD.Print("TIMEOUT");
+		//GD.Print("TIMEOUT");
 		RestartGame();
 		gameOverTimer.Stop();
 	}

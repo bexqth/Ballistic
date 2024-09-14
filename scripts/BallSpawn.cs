@@ -71,8 +71,7 @@ public partial class BallSpawn : Node2D
 		roundDone = true;
 		ballIndex = 1;
 		GenerateNewDirection();
-
-		StartShooting();
+		//StartShooting();
 	}
 
 	public void SpawnBall() {
@@ -93,7 +92,7 @@ public partial class BallSpawn : Node2D
 				//ballIndex++;
 				newBall.spawnIndex = this.spawnIndex;
 
-				GD.Print("DIRECTION" + jumpDirection);
+				//GD.Print("DIRECTION" + jumpDirection);
 				newBall.SetFlying(jumpDirection);
 
 				ballsToShoot--;
@@ -111,7 +110,7 @@ public partial class BallSpawn : Node2D
 		float randomY = rand.RandfRange(minY, maxY);
 		Godot.Vector2 newVector = new Godot.Vector2(randomX, randomY);
 		Godot.Vector2 newJumpDirection = (newVector - GlobalPosition).Normalized();
-		GD.Print("new direction is" + newJumpDirection);
+		//GD.Print("new direction is" + newJumpDirection);
 		jumpDirection = newJumpDirection;
 	}
 	
