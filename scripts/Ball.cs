@@ -11,6 +11,8 @@ public partial class Ball : CharacterBody2D
 	private Timer ballTimer;
 	public int number{get;set;}
 	public int spawnIndex{get;set;}
+	public BallSpawn ballSpawn{get;set;}
+	public Sprite2D sprite{get;set;}
 	
 	[Signal]
 	public delegate void BallCollidedEventHandler(Ball ball);
@@ -18,6 +20,7 @@ public partial class Ball : CharacterBody2D
 	public override void _Ready() {
 		isFlying = false;
 		ballTimer = GetNode<Timer>("Ball_Timer");
+		this.sprite = GetNode<Sprite2D>("Sprite2D");
 	}
 
 

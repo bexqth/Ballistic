@@ -3,12 +3,13 @@
 [ext_resource type="Script" path="res://scripts/BallSpawn.cs" id="1_15f42"]
 [ext_resource type="Texture2D" uid="uid://chcl80s7534md" path="res://icon.svg" id="2_xsk13"]
 
-[sub_resource type="Gradient" id="Gradient_ey0tv"]
-offsets = PackedFloat32Array(0, 0.546135, 0.553616, 1)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 0.984314, 0.984314, 0.984314, 0, 0.792157, 0.792157, 0.792157, 0)
+[sub_resource type="Gradient" id="Gradient_y3tgw"]
+offsets = PackedFloat32Array(0, 0.538636, 0.556818, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0)
+metadata/_snap_count = 2
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_ruryk"]
-gradient = SubResource("Gradient_ey0tv")
+gradient = SubResource("Gradient_y3tgw")
 width = 45
 height = 45
 fill = 1

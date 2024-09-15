@@ -29,7 +29,11 @@ public partial class BallSpawn : Node2D
     public int ballsCollided { get; set; } = 0; // Initialize to 0
     public bool ballLineCollided { get; set; } = false;
     public Godot.Vector2 newStartingPosition { get; set; }
-
+	public int ballSpawnScore{get;set;}
+	public Label ballSpawnScoreLabel{get;set;}
+	public Sprite2D sprite{get;set;}
+	public Color color{get;set;}
+	public bool inUse{get;set;}
 
 	private RandomNumberGenerator rand;
 	public override void _Ready()
@@ -39,6 +43,7 @@ public partial class BallSpawn : Node2D
 		this.numberLabel = GetNode<Label>("Number_Label");
 		this.shootTimer = GetNode<Timer>("Timer_Shoot");
 		this.timer = GetNode<Timer>("Timer");
+		this.sprite = GetNode<Sprite2D>("Sprite2D");
 		numberLabel.Text = ballsToShoot.ToString();
 		roundDone = false;
 		endGame = false;
@@ -91,6 +96,17 @@ public partial class BallSpawn : Node2D
 				//newBall.number = ballIndex;
 				//ballIndex++;
 				newBall.spawnIndex = this.spawnIndex;
+				newBall.ballSpawn = this;
+
+				Sprite2D newSprite = new Sprite2D();
+
+				// Assign the texture from the list to the new instance
+				newSprite.Texture = this.sprite.Texture;
+
+				// Add the new sprite as a child to the BallSpawn
+				newBall.AddChild(newSprite);
+				newBall.sprite = newSprite;
+
 
 				//GD.Print("DIRECTION" + jumpDirection);
 				newBall.SetFlying(jumpDirection);

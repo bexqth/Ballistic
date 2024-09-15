@@ -81,6 +81,11 @@ public partial class StarterBarrier : Area2D
 		if (area.GetParent() is Block block) {
 			//GD.Print("Block colided");
 			endGame = true;
+
+			for(int i = 0; i < this.ballspawns.Count; i++) {
+				ballspawns[i].endGame = this.endGame;
+			}
+			
 			gameOverTimer.Start();
 			//ballSpawn.timer.Start();
 			for(int i = 0; i < this.ballspawns.Count; i++) {

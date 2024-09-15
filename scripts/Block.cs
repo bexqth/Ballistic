@@ -121,7 +121,7 @@ public partial class Block : StaticBody2D
 		LightUp();
 		if(body is Ball ball) {
 			//GD.Print("sdsdfsdf");
-			if(ball.number == 1) {
+			/*if(ball.number == 1) {
 				int score1 = this.scoreLabel.Text.ToInt();
 				score1++;
 	    		this.scoreLabel.Text = score1.ToString();
@@ -133,7 +133,10 @@ public partial class Block : StaticBody2D
 				int score3 = this.scoreLabel3.Text.ToInt();
 				score3++;
 	    		this.scoreLabel3.Text = score3.ToString();
-			}
+			}*/
+			int score = ball.ballSpawn.ballSpawnScoreLabel.Text.ToInt();
+			score++;
+	    	ball.ballSpawn.ballSpawnScoreLabel.Text = score.ToString();
 		}
 		//this.scoreLabel.Text = this.scoreOne + " " + this.scoreTwo + " " + this.scoreThree;
 	}

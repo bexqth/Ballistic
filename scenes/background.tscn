@@ -171,7 +171,6 @@ position = Vector2(250, 185)
 [node name="Ball_spawn" parent="." node_paths=PackedStringArray("gameLabel") instance=ExtResource("4_c5jvu")]
 visible = false
 position = Vector2(287, 753)
-numberOfBalls = 1
 gameLabel = NodePath("../Label_Game")
 
 [node name="Node2D" type="Node2D" parent="."]
